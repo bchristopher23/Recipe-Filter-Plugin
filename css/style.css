@@ -1,0 +1,30 @@
+.recipe_wrap{
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.recipe:nth-child(4n+1){
+	clear: both;
+}
+
+.recipe{
+	text-align: center;
+	padding-bottom: 30px;
+}
+
+.page .entry-content .recipe a.recipe_title{
+	text-decoration: none;
+	padding-top: 20px;
+	transition: .3s;
+}
+
+.page .entry-content .recipe a.recipe_title:hover{
+	opacity: 0.8;
+}
+
+.entry-content .recipe img{
+	height: 125px;
+	max-height: 125px;
+	margin-bottom: 15px;
+}
