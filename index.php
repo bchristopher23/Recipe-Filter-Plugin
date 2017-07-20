@@ -8,7 +8,9 @@ Version: 1.0
 //Enqueue Assets
 function add_scripts(){
     wp_enqueue_style('recipe_styles', plugin_dir_url( __FILE__ ) . '/css/style.css' );
+	wp_enqueue_script('jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js', array(), null, true);
     wp_enqueue_script( 'custom_script', plugin_dir_url( __FILE__ ) . 'js/script.js' );
+    wp_enqueue_script( 'isotope_js', plugin_dir_url( __FILE__ ) . 'js/isotope.js' );
 }
 add_action('wp_enqueue_scripts', 'add_scripts');
 
@@ -16,7 +18,7 @@ add_action('wp_enqueue_scripts', 'add_scripts');
 
 //Eats
 function create_eats_tax() {
-// Labels part for the GUI
+//Labels part for the GUI
   $labels = array(
     'name' => _x( 'Eats', 'taxonomy general name' ),
     'singular_name' => _x( 'Eat', 'taxonomy singular name' ),
@@ -35,9 +37,9 @@ function create_eats_tax() {
     'menu_name' => __( 'Eats' ),
   ); 
 
-// Register the taxonomy
+//Register the taxonomy
   register_taxonomy('eats','post',array(
-    'hierarchical' => false,
+    'hierarchical' => true,
     'labels' => $labels,
     'show_ui' => true,
     'show_admin_column' => true,
@@ -50,7 +52,7 @@ add_action( 'init', 'create_eats_tax', 0 );
 
 //Cuisine
 function create_cuisine_tax() {
-// Labels part for the GUI
+//Labels part for the GUI
   $labels = array(
     'name' => _x( 'Cuisine', 'taxonomy general name' ),
     'singular_name' => _x( 'Cuisine', 'taxonomy singular name' ),
@@ -69,9 +71,9 @@ function create_cuisine_tax() {
     'menu_name' => __( 'Cuisine' ),
   ); 
 
-// Register the taxonomy
+//Register the taxonomy
   register_taxonomy('cuisine','post',array(
-    'hierarchical' => false,
+    'hierarchical' => true,
     'labels' => $labels,
     'show_ui' => true,
     'show_admin_column' => true,
@@ -84,7 +86,7 @@ add_action( 'init', 'create_cuisine_tax', 0 );
 
 //Season
 function create_season_tax() {
-// Labels part for the GUI
+//Labels part for the GUI
   $labels = array(
     'name' => _x( 'Season', 'taxonomy general name' ),
     'singular_name' => _x( 'Season', 'taxonomy singular name' ),
@@ -103,9 +105,9 @@ function create_season_tax() {
     'menu_name' => __( 'Season' ),
   ); 
 
-// Register the taxonomy
+//Register the taxonomy
   register_taxonomy('season','post',array(
-    'hierarchical' => false,
+    'hierarchical' => true,
     'labels' => $labels,
     'show_ui' => true,
     'show_admin_column' => true,
@@ -118,7 +120,7 @@ add_action( 'init', 'create_season_tax', 0 );
 
 //Time
 function create_time_tax() {
-// Labels part for the GUI
+//Labels part for the GUI
   $labels = array(
     'name' => _x( 'Time', 'taxonomy general name' ),
     'singular_name' => _x( 'Time', 'taxonomy singular name' ),
@@ -137,9 +139,9 @@ function create_time_tax() {
     'menu_name' => __( 'Time' ),
   ); 
 
-// Register the taxonomy
+//Register the taxonomy
   register_taxonomy('time','post',array(
-    'hierarchical' => false,
+    'hierarchical' => true,
     'labels' => $labels,
     'show_ui' => true,
     'show_admin_column' => true,
@@ -172,8 +174,8 @@ function recipe_sc() {
 
 		foreach ($terms as $term){
 			echo '<div class="check_grp">';
-			echo '<input type="checkbox" value="' . $term->name . '">';
-			echo '<label for="' . $term->name . '">' . $term->name . '</label></div>';
+			echo '<input class="checkbox-custom" type="checkbox" value=".' . $term->slug . '">';
+			echo '<label class="checkbox-custom-label" for="' . $term->slug . '">' . $term->name . '</label></div>';
 
 		}
 	?>
@@ -186,8 +188,8 @@ function recipe_sc() {
 
 		foreach ($terms as $term){
 			echo '<div class="check_grp">';
-			echo '<input type="checkbox" value="' . $term->name . '">';
-			echo '<label for="' . $term->name . '">' . $term->name . '</label></div>';
+			echo '<input type="checkbox" value=".' . $term->slug . '">';
+			echo '<label for="' . $term->slug . '">' . $term->name . '</label></div>';
 
 		}
 	?>
@@ -201,8 +203,8 @@ function recipe_sc() {
 
 		foreach ($terms as $term){
 			echo '<div class="check_grp">';
-			echo '<input type="checkbox" value="' . $term->name . '">';
-			echo '<label for="' . $term->name . '">' . $term->name . '</label></div>';
+			echo '<input type="checkbox" value=".' . $term->slug . '">';
+			echo '<label for="' . $term->slug . '">' . $term->name . '</label></div>';
 
 		}
 	?>
@@ -216,8 +218,8 @@ function recipe_sc() {
 
 		foreach ($terms as $term){
 			echo '<div class="check_grp">';
-			echo '<input type="checkbox" value="' . $term->name . '">';
-			echo '<label for="' . $term->name . '">' . $term->name . '</label></div>';
+			echo '<input type="checkbox" value=".' . $term->slug . '">';
+			echo '<label for="' . $term->slug . '">' . $term->name . '</label></div>';
 
 		}
 	?>
@@ -231,11 +233,20 @@ function recipe_sc() {
 
 	<?php if ( $recipes->have_posts() ) : ?>
 
-	<ul class="row recipe_wrap">
+	<ul class="row recipe_wrap" id="recipes_container">
 
 		<!-- the loop -->
 		<?php while ( $recipes->have_posts() ) : $recipes->the_post(); ?>
-			<li class="col-md-3 recipe">
+			<li class="col-md-3 recipe <?php 
+			$eats = get_the_terms(get_the_id(), 'eats');
+			$cuisine = get_the_terms(get_the_id(), 'cuisine');
+			$season = get_the_terms(get_the_id(), 'season');
+			$time = get_the_terms(get_the_id(), 'time');
+			echo $eats[0]->slug . ' ';
+			echo $cuisine[0]->slug . ' ';
+			echo $season[0]->slug . ' ';
+			echo $time[0]->slug;
+			 ?>" >
 				<a href="<?php the_permalink() ?>">
 				<?php the_post_thumbnail('medium'); ?>
 				</a>
