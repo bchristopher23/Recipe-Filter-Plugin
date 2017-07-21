@@ -2,7 +2,8 @@ jQuery(document).ready(function(){
 
 // init Isotope
 var $container = jQuery('#recipes_container').isotope({
-  itemSelector: '.recipe'
+  itemSelector: '.recipe',
+  layoutMode: 'fitRows'
 });
 
 var $output = jQuery('#output');

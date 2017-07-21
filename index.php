@@ -163,8 +163,30 @@ function recipe_sc() {
       'posts_per_page' => 10
     );
 
-    $recipes = new WP_Query( $args ); ?>    
-    <div id="recipe_tax_filter" class="col-md-3">
+    $recipes = new WP_Query( $args ); ?>   
+
+    <div class="recipe-index-sidebar">
+	<div class="row">
+    
+    <div class="col-md-3">
+    <?php dynamic_sidebar('recipe-index-1'); ?>
+	</div>    
+
+	<div class="col-md-3">
+	<?php dynamic_sidebar('recipe-index-2'); ?>
+	</div>    	
+
+	<div class="col-md-3">
+	<?php dynamic_sidebar('recipe-index-3'); ?>
+	</div>   
+
+	<div class="col-md-3">
+	<?php dynamic_sidebar('recipe-index-4'); ?>
+	</div>    
+	</div>
+	</div>
+
+    <div id="recipe_tax_filter" class="col-md-2">
     <h3>Eats</h3>
 	<?php
 	    $terms = get_terms( array(
@@ -174,8 +196,8 @@ function recipe_sc() {
 
 		foreach ($terms as $term){
 			echo '<div class="check_grp">';
-			echo '<input class="checkbox-custom" type="checkbox" value=".' . $term->slug . '">';
-			echo '<label class="checkbox-custom-label" for="' . $term->slug . '">' . $term->name . '</label></div>';
+			echo '<input class="css-checkbox" type="checkbox" id="' . $term->slug . '" value=".' . $term->slug . '">';
+			echo '<label class="css-label lite-x-gray" for="' . $term->slug . '">' . $term->name . '</label></div>';
 
 		}
 	?>
@@ -188,8 +210,8 @@ function recipe_sc() {
 
 		foreach ($terms as $term){
 			echo '<div class="check_grp">';
-			echo '<input type="checkbox" value=".' . $term->slug . '">';
-			echo '<label for="' . $term->slug . '">' . $term->name . '</label></div>';
+			echo '<input class="css-checkbox" type="checkbox" id="' . $term->slug . '" value=".' . $term->slug . '">';
+			echo '<label class="css-label lite-x-gray" for="' . $term->slug . '">' . $term->name . '</label></div>';
 
 		}
 	?>
@@ -203,8 +225,8 @@ function recipe_sc() {
 
 		foreach ($terms as $term){
 			echo '<div class="check_grp">';
-			echo '<input type="checkbox" value=".' . $term->slug . '">';
-			echo '<label for="' . $term->slug . '">' . $term->name . '</label></div>';
+			echo '<input class="css-checkbox" type="checkbox" id="' . $term->slug . '" value=".' . $term->slug . '">';
+			echo '<label class="css-label lite-x-gray" for="' . $term->slug . '">' . $term->name . '</label></div>';
 
 		}
 	?>
@@ -218,14 +240,14 @@ function recipe_sc() {
 
 		foreach ($terms as $term){
 			echo '<div class="check_grp">';
-			echo '<input type="checkbox" value=".' . $term->slug . '">';
-			echo '<label for="' . $term->slug . '">' . $term->name . '</label></div>';
+			echo '<input class="css-checkbox" type="checkbox" id="' . $term->slug . '" value=".' . $term->slug . '">';
+			echo '<label class="css-label lite-x-gray" for="' . $term->slug . '">' . $term->name . '</label></div>';
 
 		}
 	?>
     </div>
 
-	<div id="recipes" class="col-md-9">
+	<div id="recipes" class="col-md-10">
 
 	<?php 
 	// the query
@@ -233,10 +255,18 @@ function recipe_sc() {
 
 	<?php if ( $recipes->have_posts() ) : ?>
 
-	<ul class="row recipe_wrap" id="recipes_container">
-
+	<ul class="recipe_wrap" id="recipes_container">
+	<div class="row">
 		<!-- the loop -->
-		<?php while ( $recipes->have_posts() ) : $recipes->the_post(); ?>
+		<?php $i = 0;
+		while ( $recipes->have_posts() ) : $recipes->the_post();
+			if ($i == 4) {
+		        $i = 0;
+		        ?>
+		        </div>
+		        <div class="row">
+		        <?php
+		    }?>
 			<li class="col-md-3 recipe <?php 
 			$eats = get_the_terms(get_the_id(), 'eats');
 			$cuisine = get_the_terms(get_the_id(), 'cuisine');
@@ -253,7 +283,9 @@ function recipe_sc() {
 				<a class="recipe_title" href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
 
 			</li>
-		<?php endwhile; ?>
+		<?php 
+		$i++;
+		endwhile; ?>
 		<!-- end of the loop -->
 
 	</ul>
@@ -272,5 +304,16 @@ function recipe_sc() {
 }
 
 add_shortcode('b_recipes', 'recipe_sc');
+
+add_action('admin_head', 'custom_css');
+
+function custom_css() {
+  echo '<style>
+
+.column-title{
+	width: 150px !important;
+}
+  </style>';
+}
 
 ?>
