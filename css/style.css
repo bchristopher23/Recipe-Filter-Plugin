@@ -89,7 +89,7 @@
 	border-bottom: 1px solid #333;
 }
 
-#taxonomy_dropdown_widget-2 select{
+#taxonomy_dropdown_widget-2 select, #taxonomy_dropdown_widget-3 select{
 	display: block; 
 	width: 100%; 
 	height: 34px; 
@@ -111,6 +111,6 @@
 	box-shadow:none;
 }
 
-#taxonomy_dropdown_widget-2 label{
+#taxonomy_dropdown_widget-2 label,#taxonomy_dropdown_widget-3 label{
 	font-weight: normal;
 }

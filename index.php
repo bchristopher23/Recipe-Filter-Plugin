@@ -237,7 +237,7 @@ function recipe_sc() {
 	    'taxonomy' => 'time',
 	    'hide_empty' => false,
 		) );
-
+			
 		foreach ($terms as $term){
 			echo '<div class="check_grp">';
 			echo '<input class="css-checkbox" type="checkbox" id="' . $term->slug . '" value=".' . $term->slug . '">';
@@ -305,15 +305,19 @@ function recipe_sc() {
 
 add_shortcode('b_recipes', 'recipe_sc');
 
-add_action('admin_head', 'custom_css');
-
 function custom_css() {
   echo '<style>
 
 .column-title{
 	width: 150px !important;
 }
+
+.wp-list-table #taxonomy-eats, .wp-list-table #taxonomy-cuisine, .wp-list-table #taxonomy-season, .wp-list-table #taxonomy-time, .column-taxonomy-eats, .column-taxonomy-time, .column-taxonomy-season, .column-taxonomy-cuisine{
+	display: none;
+}
   </style>';
 }
+
+add_action('admin_head', 'custom_css');
 
 ?>
