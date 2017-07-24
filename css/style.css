@@ -114,3 +114,40 @@
 #taxonomy_dropdown_widget-2 label,#taxonomy_dropdown_widget-3 label{
 	font-weight: normal;
 }
+
+#ingredients_wrap, #ingredients_wrap ul{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.ingredient_letter{
+	font-size: 14px;
+	background: #3f3b36;
+	color: #fff;
+	text-align: center;
+	width: 30px;
+	padding: 7px;
+	margin-bottom: 20px;
+}
+
+.ingredient_item{
+	text-transform: capitalize;
+	float: left;
+	width: 20%;
+	text-align: center;
+}
+
+.ingredients_group{
+	border-top: 1px solid #333;
+	margin-bottom: 50px;
+}
+
+.ingredient_item img{
+	margin: 0;
+	padding: 0;
+}
+
+.ingredients_jump{
+	margin-bottom: 50px;
+}
